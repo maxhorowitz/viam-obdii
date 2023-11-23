@@ -3,11 +3,11 @@ This repository contains a simple example of how to build a custom Viam sensor c
 
 [Learn how to build Viam components here](https://docs.viam.com/registry/create/)
 
-## How to use this repo
+## How to use this template repo
 
 1. Create an account on https://app.viam.com
 2. Install the Viam RDK (e.g. directly on your mac) and register it with app.viam.com [Installation Docs](https://docs.viam.com/installation/)
-3. Clone this repo
+3. Create a new repo from this template repo
 4. Add the repo folder as local module to your RDK configuration on app.viam.com
 
 <img src="./media/local_module.png" height="150">
