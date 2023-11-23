@@ -27,7 +27,7 @@ class MySensor(Sensor):
     Subclass the Viam Sensor component and implement the required functions
     """
 
-    MODEL: ClassVar[Model] = Model(ModelFamily("viam", "sensor"), "mysensor")
+    MODEL: ClassVar[Model] = Model(ModelFamily("sample", "sensor"), "mysensor")
 
     def __init__(self, name: str):
         super().__init__(name)
