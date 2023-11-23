@@ -10,6 +10,16 @@ This repository contains a simple example of how to build a custom Viam sensor c
 3. Clone this repo
 4. Add the repo folder as local module to your RDK configuration on app.viam.com
 
-![Local Module Configuration](./media/local_module.png)
-6. 
-7. 
+<img src="./media/local_module.png" height="150">
+
+6. Add a local component
+
+<img src="./media/local_sensor.png" width="250">
+
+7. Configure your sensors attributes
+
+<img src="./media/sensor_attributes.png" width="400">
+
+8. Go and play :-)
+
+<img src="./media/sensor_play.png" width="250">
