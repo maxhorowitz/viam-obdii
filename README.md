@@ -22,4 +22,4 @@ This repository contains a simple example of how to build a custom Viam sensor c
 
 8. Go and play :-)
 
-<img src="./media/sensor_play.png" width="250">
+<img src="./media/sensor_play.png" width="450">
