@@ -7,7 +7,7 @@ import asyncio
 from viam.module.module import Module
 from viam.components.sensor import Sensor
 
-from src.sensor.my_sensor import MySensor
+from sensor.my_sensor import MySensor
 
 
 async def main():
