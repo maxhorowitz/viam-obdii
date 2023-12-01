@@ -30,7 +30,8 @@ class MySensor(Sensor):
     @classmethod
     def validate_config(cls, config: ComponentConfig) -> Sequence[str]:
         """
-        Validates the configuration added to the Viam RDK and executed before new(). Implement any specific attribute validation required by your component.
+        Validates the configuration added to the Viam RDK and executed before new(). 
+        Implement any specific attribute validation required by your component.
         """
         if "multiplier" in config.attributes.fields:
             if not config.attributes.fields["multiplier"].HasField("number_value"):
@@ -45,7 +46,8 @@ class MySensor(Sensor):
         cls, config: ComponentConfig, dependencies: Mapping[ResourceName, ResourceBase]
     ) -> Self:
         """
-        This constructor instantiates a new "mysensor" component based upon the configuration added to the RDK.
+        This constructor instantiates a new "mysensor" component based upon the 
+        configuration added to the RDK.
         """
         sensor = cls(config.name)
         sensor.reconfigure(config, dependencies)
