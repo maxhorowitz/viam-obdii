@@ -102,7 +102,7 @@ class MySensor(Sensor):
         return {"signal": 1 * self.multiplier}
 
 
-# Register this model in the RDK registry
+# Register this model with the module.
 Registry.register_resource_creator(
     Sensor.SUBTYPE,
     MySensor.MODEL,

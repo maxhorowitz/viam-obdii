@@ -12,8 +12,8 @@ from sensor.my_sensor import MySensor
 
 async def main():
     """
-    This function creates and starts a new module, after adding all desired resource models.
-    Resource models must be pre-registered -> see my_sensor.py at the end of the file.
+    This function creates and starts a new module and verifies that the required 
+    models are properly registered -> see my_sensor.py at the end of the file.
     """
     module = Module.from_args()
     module.add_model_from_registry(Sensor.SUBTYPE, MySensor.MODEL)
