@@ -3,6 +3,8 @@ This repository contains a simple example of how to build a custom Viam sensor c
 
 [Learn how to build Viam components here](https://docs.viam.com/registry/create/)
 
+For more advanced people or after having this successfuly completed, have a look at this more detailed [repository](https://github.com/viam-labs/python-example-module) which also explains how to use the Viam Modular Registry
+
 ## How to use this template repo
 
 1. Create an account on https://app.viam.com
