@@ -15,7 +15,7 @@ Follow these steps to add the sensor component to your machine:
 
 Add a "local module" to your machine:
 
-<img src="./media/1_module.png" height="450">
+<img src="./media/1_module.png" width="450">
 
 Add the path to your `run.sh` file:
 

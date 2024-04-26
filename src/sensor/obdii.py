@@ -15,17 +15,25 @@ from viam.resource.registry import Registry, ResourceCreatorRegistration
 from viam.resource.types import Model, ModelFamily
 from viam.utils import ValueTypes
 
+
+import obd
+
+
 # Activate the logger to send log entries to app.viam.com, visible under the logs tab
 LOGGER = getLogger(__name__)
 
+# Model Family & Name
+MODULENAMESPACE = "maxhorowitz"
+MODULETYPE = "utils"
+MODULENAME = "obdii"
 
-class MySensor(Sensor):
+class OBDII(Sensor):
     """
     Class representing the sensor to be implemented/wrapped.
     Subclass the Viam Sensor component and implement the required functions
     """
 
-    MODEL: ClassVar[Model] = Model(ModelFamily("sample", "sensor"), "mysensor")
+    MODEL: ClassVar[Model] = Model(ModelFamily(MODULENAMESPACE, MODULETYPE), MODULENAME)
 
     @classmethod
     def validate_config(cls, config: ComponentConfig) -> Sequence[str]:
@@ -33,12 +41,12 @@ class MySensor(Sensor):
         Validates the configuration added to the Viam RDK and executed before new(). 
         Implement any specific attribute validation required by your component.
         """
-        if "multiplier" in config.attributes.fields:
-            if not config.attributes.fields["multiplier"].HasField("number_value"):
-                raise ValueError("Multiplier must be a float.")
-            multiplier = config.attributes.fields["multiplier"].number_value
-            if multiplier == 0:
-                raise ValueError("Multiplier cannot be 0.")
+        if "cmd" in config.attributes.fields:
+            if not config.attributes.fields["cmd"].HasField("string_value"):
+                raise ValueError("Command must be a string.")
+            command = config.attributes.fields["cmd"].string_value
+            if command == "":
+                raise ValueError("Command cannot be the empty string.")
         return []
 
     @classmethod
@@ -46,7 +54,7 @@ class MySensor(Sensor):
         cls, config: ComponentConfig, dependencies: Mapping[ResourceName, ResourceBase]
     ) -> Self:
         """
-        This constructor instantiates a new "mysensor" component based upon the 
+        This constructor instantiates a new "OBDII" component based upon the 
         configuration added to the RDK.
         """
         sensor = cls(config.name)
@@ -58,7 +66,16 @@ class MySensor(Sensor):
         Actual component instance constructor
         """
         super().__init__(name)
-        self.multiplier = 1.0
+        self.command = "SPEED"
+
+        # Connect to the OBD-II device
+        self.connection = obd.OBD("/dev/ttyUSB0")
+
+        # Check if the connection was successful
+        if self.connection.is_connected():
+            print("Connected to OBD-II interface")
+        else:
+            print("Failed to connect to OBD-II interface")
 
     def reconfigure(
         self, config: ComponentConfig, dependencies: Mapping[ResourceName, ResourceBase]
@@ -67,11 +84,11 @@ class MySensor(Sensor):
         This method is executed whenever a new mysensor instance is created or
         configuration attributes are changed
         """
-        if "multiplier" in config.attributes.fields:
-            multiplier = config.attributes.fields["multiplier"].number_value
+        if "cmd" in config.attributes.fields:
+            command = config.attributes.fields["cmd"].string_value
         else:
-            multiplier = 1.0
-        self.multiplier = multiplier
+            command = "SPEED"
+        self.command = command
 
     async def close(self):
         """
@@ -96,15 +113,13 @@ class MySensor(Sensor):
     async def get_readings(
         self, extra: Optional[Dict[str, Any]] = None, **kwargs
     ) -> Mapping[str, Any]:
-        """
-        Required method to be implemented for a sensor component
-        """
-        return {"signal": 1 * self.multiplier}
+        response = self.connection.query(self.command)
+        return {"speed": response.value}
 
 
 # Register this model with the module.
 Registry.register_resource_creator(
     Sensor.SUBTYPE,
-    MySensor.MODEL,
-    ResourceCreatorRegistration(MySensor.new, MySensor.validate_config),
+    OBDII.MODEL,
+    ResourceCreatorRegistration(OBDII.new, OBDII.validate_config),
 )
