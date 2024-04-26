@@ -9,19 +9,34 @@ For more advanced people or after having this successfuly completed, have a look
 
 1. Create an account on https://app.viam.com
 2. Install the Viam RDK (e.g. directly on your mac) and register it with app.viam.com [Installation Docs](https://docs.viam.com/installation/)
-3. Create a new repo from this template repo
-4. Add the repo folder as local module to your RDK configuration on app.viam.com
+3. Create a new repo from this template repo and clone it to your machine
 
-<img src="./media/local_module.png" height="150">
+Follow these steps to add the sensor component to your machine:
 
-6. Add a local component
+Add a "local module" to your machine:
 
-<img src="./media/local_sensor.png" width="250">
+<img src="./media/1_module.png" height="150">
 
-7. Configure your sensors attributes
+Add the path to your `run.sh` file:
 
-<img src="./media/sensor_attributes.png" width="400">
+<img src="./media/2_module.png" width="250">
 
-8. Go and play :-)
+Save the module:
 
-<img src="./media/sensor_play.png" width="450">
+<img src="./media/3_module.png" width="400">
+
+Add a "local component" to your machine:
+
+<img src="./media/1_component.png" width="450">
+
+Fill in the details as shown on the screenshot:
+
+<img src="./media/2_component.png" width="450">
+
+Add the configuration attribute `multiplier`with a number of your choice and save the component:
+
+<img src="./media/3_component.png" width="450">
+
+Verify your machine is started and online, then navigate to the `control` tab and hit the "Get Readings" button:
+
+<img src="./media/1_verify.png" width="450">
