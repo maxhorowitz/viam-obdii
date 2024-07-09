@@ -1,2 +1,3 @@
 # add a version if viam should be pinned to a specific version
 viam-sdk
+obd==0.7.2
