@@ -18,6 +18,15 @@ from viam.utils import ValueTypes
 
 import obd
 
+obdCommand = {
+    "STATUS": obd.commands.STATUS,
+    "FUEL_STATUS": obd.commands.FUEL_STATUS,
+    "ENGINE_LOAD": obd.commands.ENGINE_LOAD,
+    "COOLANT_TEMP": obd.commands.COOLANT_TEMP,
+    "OIL_TEMP": obd.commands.OIL_TEMP,
+    "RPM": obd.commands.RPM,
+    "SPEED": obd.commands.SPEED,
+}
 
 # Activate the logger to send log entries to app.viam.com, visible under the logs tab
 LOGGER = getLogger(__name__)
@@ -42,11 +51,11 @@ class OBDII(Sensor):
         Implement any specific attribute validation required by your component.
         """
         if "cmd" in config.attributes.fields:
-            if not config.attributes.fields["cmd"].HasField("string_value"):
-                raise ValueError("Command must be a string.")
-            command = config.attributes.fields["cmd"].string_value
-            if command == "":
-                raise ValueError("Command cannot be the empty string.")
+            if not config.attributes.fields["cmd"].HasField("list_value"):
+                raise ValueError("Command must be a list.")
+            command = config.attributes.fields["cmd"].list_value
+            if command == []:
+                raise ValueError("Command cannot be an empty list.")
         return []
 
     @classmethod
@@ -66,7 +75,7 @@ class OBDII(Sensor):
         Actual component instance constructor
         """
         super().__init__(name)
-        self.command = "RPM"
+        self.command = ["RPM"]
 
         # Connect to the OBD-II device
         self.connection = obd.OBD("/dev/ttyUSB0")
@@ -85,9 +94,9 @@ class OBDII(Sensor):
         configuration attributes are changed
         """
         if "cmd" in config.attributes.fields:
-            command = config.attributes.fields["cmd"].string_value
+            command = config.attributes.fields["cmd"].list_value
         else:
-            command = "RPM"
+            command = ["RPM"]
         self.command = command
 
     async def close(self):
@@ -113,25 +122,16 @@ class OBDII(Sensor):
     async def get_readings(
         self, extra: Optional[Dict[str, Any]] = None, **kwargs
     ) -> Mapping[str, Any]:
-        response = None
-        match self.command:
-            case "STATUS":
-                response = self.connection.query(obd.commands.STATUS)
-            case "FUEL_STATUS":
-                response = self.connection.query(obd.commands.FUEL_STATUS)
-            case "ENGINE_LOAD":
-                response = self.connection.query(obd.commands.ENGINE_LOAD)
-            case "COOLANT_TEMP":
-                response = self.connection.query(obd.commands.COOLANT_TEMP)
-            case "OIL_TEMP":
-                response = self.connection.query(obd.commands.OIL_TEMP)
-            case "RPM":
-                response = self.connection.query(obd.commands.RPM)
-            case "SPEED":
-                response = self.connection.query(obd.commands.SPEED)
-            case _:
-                return {self.command: "invalid_cmd"}
-        return {self.command: response.value}
+        response: Mapping[str, Any] = {}
+        for cmd in self.command:
+            reading = None
+            obd_cmd = obdCommand.get(cmd)
+            if obd_cmd is not None:
+                reading = self.connection.query(obd_cmd)
+                response[cmd] = reading.value
+            else:
+                response[cmd] = "invalid_cmd"
+        return response
 
 
 # Register this model with the module.
