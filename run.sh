@@ -9,11 +9,11 @@ VENV_NAME=".venv"
 PYTHON="$VENV_NAME/bin/python"
 ENV_ERROR="This module requires Python >=3.8, pip, and virtualenv to be installed."
 
-if ! python3 -m venv $VENV_NAME >/dev/null 2>&1; then
+SUDO="sudo"
+if ! $SUDO python3 -m venv $VENV_NAME >/dev/null 2>&1; then
     echo "Failed to create virtualenv."
     if command -v apt-get >/dev/null; then
         echo "Detected Debian/Ubuntu, attempting to install python3-venv automatically."
-        SUDO="sudo"
         if ! command -v $SUDO >/dev/null; then
             SUDO=""
         fi
@@ -22,7 +22,7 @@ if ! python3 -m venv $VENV_NAME >/dev/null 2>&1; then
 			$SUDO apt -qq update >/dev/null
 		fi
         $SUDO apt install -qqy python3-venv >/dev/null 2>&1
-        if ! python3 -m venv $VENV_NAME >/dev/null 2>&1; then
+        if ! $SUDO python3 -m venv $VENV_NAME >/dev/null 2>&1; then
             echo $ENV_ERROR >&2
             exit 1
         fi
