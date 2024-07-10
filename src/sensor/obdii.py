@@ -128,7 +128,10 @@ class OBDII(Sensor):
             obd_cmd = obdCommand.get(cmd)
             if obd_cmd is not None:
                 reading = self.connection.query(obd_cmd)
-                response[cmd] = reading.value
+                if reading.value is not None:
+                    response[cmd] = reading.value
+                else:
+                    response[cmd] = "null"
             else:
                 response[cmd] = "invalid_cmd"
         return response
