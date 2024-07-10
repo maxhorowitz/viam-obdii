@@ -66,7 +66,7 @@ class OBDII(Sensor):
         Actual component instance constructor
         """
         super().__init__(name)
-        self.command = "SPEED"
+        self.command = "RPM"
 
         # Connect to the OBD-II device
         self.connection = obd.OBD("/dev/ttyUSB0")
@@ -87,7 +87,7 @@ class OBDII(Sensor):
         if "cmd" in config.attributes.fields:
             command = config.attributes.fields["cmd"].string_value
         else:
-            command = "SPEED"
+            command = "RPM"
         self.command = command
 
     async def close(self):
@@ -113,8 +113,25 @@ class OBDII(Sensor):
     async def get_readings(
         self, extra: Optional[Dict[str, Any]] = None, **kwargs
     ) -> Mapping[str, Any]:
-        response = self.connection.query(self.command)
-        return {"speed": response.value}
+        response = None
+        match self.command:
+            case "STATUS":
+                response = self.connection.query(obd.commands.STATUS)
+            case "FUEL_STATUS":
+                response = self.connection.query(obd.commands.FUEL_STATUS)
+            case "ENGINE_LOAD":
+                response = self.connection.query(obd.commands.ENGINE_LOAD)
+            case "COOLANT_TEMP":
+                response = self.connection.query(obd.commands.COOLANT_TEMP)
+            case "OIL_TEMP":
+                response = self.connection.query(obd.commands.OIL_TEMP)
+            case "RPM":
+                response = self.connection.query(obd.commands.RPM)
+            case "SPEED":
+                response = self.connection.query(obd.commands.SPEED)
+            case _:
+                return {self.command: "invalid_cmd"}
+        return {self.command: response.value}
 
 
 # Register this model with the module.
