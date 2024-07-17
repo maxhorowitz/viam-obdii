@@ -1,8 +1,10 @@
 #!/bin/sh
 
-#Sample shell scrip to launch the Python module. This may vary depending on your environment and needs
+#!/bin/bash
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-cd `dirname $0`
+# Navigate to script directory
+cd "$SCRIPT_DIR"
 
 # Create a virtual environment to run our code
 VENV_NAME=".venv"
@@ -42,4 +44,4 @@ fi
 # Be sure to use `exec` so that termination signals reach the python process,
 # or handle forwarding termination signals manually
 echo "Starting module..."
-exec $PYTHON src/main.py $@
+exec ${PYTHON} ${SCRIPT_DIR}/src/main.py "$@"

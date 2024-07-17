@@ -1,2 +1,11 @@
-viam-sdk
+asyncio==3.4.3
+googleapis-common-protos==1.62.0
+grpclib==0.4.6
+h2==4.1.0
+hpack==4.0.0
+hyperframe==6.0.1
+multidict==6.0.5
+protobuf==4.25.2
+typing_extensions==4.9.0
+viam-sdk==0.13.3
 obd
