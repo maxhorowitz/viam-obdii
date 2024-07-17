@@ -105,7 +105,6 @@ obd_commands = {
     "THROTTLE_ACTUATOR": obd.commands.THROTTLE_ACTUATOR,
     "RUN_TIME_MIL": obd.commands.RUN_TIME_MIL,
     "TIME_SINCE_DTC_CLEARED": obd.commands.TIME_SINCE_DTC_CLEARED,
-    "unsupported": obd.commands.unsupported,
     "MAX_MAF": obd.commands.MAX_MAF,
     "FUEL_TYPE": obd.commands.FUEL_TYPE,
     "ETHANOL_PERCENT": obd.commands.ETHANOL_PERCENT,
