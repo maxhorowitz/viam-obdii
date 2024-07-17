@@ -126,7 +126,7 @@ obd_commands = {
 LOGGER = getLogger(__name__)
 
 # Model Family & Name
-MODULENAMESPACE = "maxhorowitz"
+MODULENAMESPACE = "jeep"
 MODULETYPE = "viam-obdii"
 MODULENAME = "obdii"
 
