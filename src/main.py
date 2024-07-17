@@ -16,6 +16,7 @@ async def main():
     This function creates and starts a new module and verifies that the required 
     models are properly registered -> see my_sensor.py at the end of the file.
     """
+
     module = Module.from_args()
     module.add_model_from_registry(Sensor.SUBTYPE, OBDII.MODEL)
     await module.start()

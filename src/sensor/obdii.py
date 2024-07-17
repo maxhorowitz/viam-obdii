@@ -229,11 +229,3 @@ class OBDII(Sensor):
             else:
                 response[cmd] = "invalid_cmd"
         return response
-
-
-# Register this model with the module.
-Registry.register_resource_creator(
-    Sensor.SUBTYPE,
-    OBDII.MODEL,
-    ResourceCreatorRegistration(OBDII.new, OBDII.validate_config),
-)
