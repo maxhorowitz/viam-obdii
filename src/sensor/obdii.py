@@ -15,23 +15,17 @@ from viam.resource.registry import Registry, ResourceCreatorRegistration
 from viam.resource.types import Model, ModelFamily
 from viam.utils import ValueTypes
 
-
 import obd
+import traceback
 
 obd_commands = {
     "STATUS": obd.commands.STATUS,
     "FUEL_STATUS": obd.commands.FUEL_STATUS,
     "ENGINE_LOAD": obd.commands.ENGINE_LOAD,
     "COOLANT_TEMP": obd.commands.COOLANT_TEMP,
-    "OIL_TEMP": obd.commands.OIL_TEMP,
-    "RPM": obd.commands.RPM,
     "SPEED": obd.commands.SPEED,
     "PIDS_A": obd.commands.PIDS_A,
-    "STATUS": obd.commands.STATUS,
     "FREEZE_DTC": obd.commands.FREEZE_DTC,
-    "FUEL_STATUS": obd.commands.FUEL_STATUS,
-    "ENGINE_LOAD": obd.commands.ENGINE_LOAD,
-    "COOLANT_TEMP": obd.commands.COOLANT_TEMP,
     "SHORT_FUEL_TRIM_1": obd.commands.SHORT_FUEL_TRIM_1,
     "LONG_FUEL_TRIM_1": obd.commands.LONG_FUEL_TRIM_1,
     "SHORT_FUEL_TRIM_2": obd.commands.SHORT_FUEL_TRIM_2,
@@ -39,7 +33,6 @@ obd_commands = {
     "FUEL_PRESSURE": obd.commands.FUEL_PRESSURE,
     "INTAKE_PRESSURE": obd.commands.INTAKE_PRESSURE,
     "RPM": obd.commands.RPM,
-    "SPEED": obd.commands.SPEED,
     "TIMING_ADVANCE": obd.commands.TIMING_ADVANCE,
     "INTAKE_TEMP": obd.commands.INTAKE_TEMP,
     "MAF": obd.commands.MAF,
@@ -190,7 +183,7 @@ class OBDII(Sensor):
         if "cmd" in config.attributes.fields:
             command = config.attributes.fields["cmd"].list_value
         else:
-            command = ["RPM"]
+            command = obd_commands.keys()
         self.command = command
 
     async def close(self):
@@ -221,11 +214,30 @@ class OBDII(Sensor):
             reading = None
             obd_cmd = obd_commands.get(cmd)
             if obd_cmd is not None:
-                reading = self.connection.query(obd_cmd)
-                if reading.value is not None:
-                    response[cmd] = reading.value
-                else:
-                    response[cmd] = "null"
+                try:
+                    reading = self.connection.query(obd_cmd)
+                    if reading.value is not None:
+                        val_type = type(reading.value)
+                        value = reading.value
+
+                        print(f"TYPE IS {val_type} {val_type.__name__} {val_type is tuple}", flush=True)
+                        if val_type is tuple:
+                            value = str(reading.value)
+                        elif val_type.__name__ == 'Quantity':
+                            print("it is a quantity", flush=True)
+                            value = str(reading.value)
+                        elif val_type.__name__ == 'Status':
+                            print("it is a status", flush=True)
+                            value = str(reading.value)
+                        elif val_type.__name__ == 'BitArray':
+                            print("it is a bitarray", flush=True)
+                            value = list(reading.value)
+                        response[cmd] = value
+                    else:
+                        pass
+                        response[cmd] = "null"
+                except:
+                    print(f"error querying for {obd_cmd}: {traceback.format_exc()}", flush=True)
             else:
                 response[cmd] = "invalid_cmd"
         return response
