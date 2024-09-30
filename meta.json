@@ -1,13 +1,13 @@
 {
   "$schema": "https://dl.viam.dev/module.schema.json",
-  "module_id": "jeep:viam-car",
+  "module_id": "jeep:viam-obdii",
   "visibility": "public",
-  "url": "https://github.com/maxhorowitz/viam-obdii/tree/main",
-  "description": "Module for extracting data from a vehicle's OBDII port.",
+  "url": "https://github.com/maxhorowitz/viam-obdii",
+  "description": "Module for extracting data from vehicles' OBDII ports.",
   "models": [
     {
-      "api": "",
-      "model": ""
+      "api": "rdk:component:sensor",
+      "model": "jeep:component:viam-obdii"
     }
   ],
   "entrypoint": "./run.sh"
