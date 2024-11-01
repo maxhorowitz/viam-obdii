@@ -215,7 +215,12 @@ class OBDII(Sensor):
                 try:
                     reading = self.connection.query(obd_cmd)
                     if reading.value is not None:
-                        response[cmd] = quantity_to_array()
+                        parsed = None
+                        try:
+                            parsed = quantity_to_array(reading.Value)
+                        except:
+                            parsed = reading.Value
+                        response[cmd] = parsed
                 except:
                     pass
             else:
