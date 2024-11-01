@@ -2,6 +2,7 @@ from typing import Any, ClassVar, Dict, Mapping, Optional, Sequence
 
 from typing_extensions import Self
 
+from viam.components.movement_sensor import MovementSensor
 from viam.components.movement_sensor import GeoPoint, Vector3, Orientation
 from viam.logging import getLogger
 from viam.proto.app.robot import ComponentConfig
@@ -136,7 +137,7 @@ MODULENAMESPACE = "jeep"
 MODULETYPE = "component"
 MODULENAME = "movement_sensor"
 
-class OBDII(Sensor):
+class OBDII(MovementSensor):
     """
     Class representing the sensor to be implemented/wrapped.
     Subclass the Viam Movement Sensor component and implement the required functions
