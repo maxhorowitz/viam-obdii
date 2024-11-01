@@ -6,7 +6,7 @@
   "description": "Module for extracting data from vehicles' OBDII ports.",
   "models": [
     {
-      "api": "rdk:component:sensor",
+      "api": "rdk:component:movement_sensor",
       "model": "jeep:component:viam-obdii"
     }
   ],

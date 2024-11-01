@@ -15,6 +15,8 @@ from viam.resource.registry import Registry, ResourceCreatorRegistration
 from viam.resource.types import Model, ModelFamily
 from viam.utils import ValueTypes
 
+from pint_utils import quantity_to_array
+
 import obd
 import traceback
 
@@ -162,7 +164,7 @@ class OBDII(Sensor):
         Actual component instance constructor
         """
         super().__init__(name)
-        self.command = ["RPM"]
+        self.command = []
 
         # Connect to the OBD-II device
         self.connection = obd.OBD("/dev/ttyUSB0")
@@ -180,11 +182,7 @@ class OBDII(Sensor):
         This method is executed whenever a new mysensor instance is created or
         configuration attributes are changed
         """
-        if "cmd" in config.attributes.fields:
-            command = config.attributes.fields["cmd"].list_value
-        else:
-            command = obd_commands.keys()
-        self.command = command
+        self.command = obd_commands.keys()
 
     async def close(self):
         """
@@ -217,30 +215,68 @@ class OBDII(Sensor):
                 try:
                     reading = self.connection.query(obd_cmd)
                     if reading.value is not None:
-                        val_type = type(reading.value)
-                        value = reading.value
-
-                        print(f"TYPE IS {val_type} {val_type.__name__} {val_type is tuple}", flush=True)
-                        if val_type is tuple:
-                            value = str(reading.value)
-                        elif val_type.__name__ == 'Quantity':
-                            print("it is a quantity", flush=True)
-                            value = str(reading.value)
-                        elif val_type.__name__ == 'Status':
-                            print("it is a status", flush=True)
-                            value = str(reading.value)
-                        elif val_type.__name__ == 'BitArray':
-                            print("it is a bitarray", flush=True)
-                            value = list(reading.value)
-                        response[cmd] = value
-                    else:
-                        pass
-                        response[cmd] = "null"
+                        response[cmd] = quantity_to_array()
                 except:
-                    print(f"error querying for {obd_cmd}: {traceback.format_exc()}", flush=True)
+                    pass
             else:
                 response[cmd] = "invalid_cmd"
         return response
+    
+    async def get_position(
+        self, *, extra: Dict[str, Any] = None, timeout: float = None, **kwargs
+    ) -> Tuple[GeoPoint, float]:
+        return GeoPoint(latitude=0.0, longitude=0.0), 0.0
+
+    async def get_linear_velocity(
+        self, *, extra: Dict[str, Any] = None, timeout: float = None, **kwargs
+    ) -> Vector3:
+        return Vector3(x=0.0, y=0.0, z=0.0)
+
+    async def get_angular_velocity(
+        self, *, extra: Dict[str, Any] = None, timeout: float = None, **kwargs
+    ) -> Vector3:
+        return Vector3(x=0.0, y=0.0, z=0.0)
+
+    async def get_linear_acceleration(
+        self, *, extra: Dict[str, Any] = None, timeout: float = None, **kwargs
+    ) -> Vector3:
+        return Vector3(x=0.0, y=0.0, z=0.0)
+
+    async def get_compass_heading(
+        self, *, extra: Dict[str, Any] = None, timeout: float = None, **kwargs
+    ) -> float:
+        return 0.0
+
+    async def get_orientation(
+        self, *, extra: Dict[str, Any] = None, timeout: float = None, **kwargs
+    ) -> Orientation:
+        return Orientation(o_x=0.0, o_y=0.0, o_z=0.0, theta=0.0)
+
+    async def get_properties(
+        self, *, extra: Dict[str, Any] = None, timeout: float = None, **kwargs
+    ) -> Dict[str, Any]:
+        return {"property1": "value1", "property2": "value2"}
+
+    async def get_accuracy(
+        self, *, extra: Dict[str, Any] = None, timeout: float = None, **kwargs
+    ) -> Dict[str, Any]:
+        return {"accuracy1": 0.0, "accuracy2": 0.0}
+
+    async def get_geometries(
+        self, *, extra: Dict[str, Any] = None, timeout: float = None, **kwargs
+    ) -> List[Geometry]:
+        return [Geometry(center=GeoPoint(latitude=0.0, longitude=0.0), radius=1.0)]
+
+    @classmethod
+    def from_robot(cls, robot: Any, name: str) -> 'DummyMovementSensorClient':
+        return cls(name)
+
+    @classmethod
+    def get_resource_name(cls, name: str) -> str:
+        return f"resource_{name}"
+
+    def get_operation(self, kwargs: Mapping[str, Any]) -> str:
+        return "dummy_operation"
 
 # Register this model with the module.
 Registry.register_resource_creator(
