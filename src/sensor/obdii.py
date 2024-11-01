@@ -165,7 +165,7 @@ class OBDII(Sensor):
         self.command = ["RPM"]
 
         # Connect to the OBD-II device
-        self.connection = obd.OBD("/dev/ttyUSB0")
+        self.connection = obd.OBD(portstr='/dev/rfcomm0', baudrate=115200, fast=True, timeout=0.1, check_voltage=False, start_low_power=False)
 
         # Check if the connection was successful
         if self.connection.is_connected():
