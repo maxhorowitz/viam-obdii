@@ -11,7 +11,7 @@ jobs:
       - name: build
         run: echo "tar -czf module.tar.gz run.sh requirements.txt src" && false # <-- replace this with the command that builds your module's tar.gz
       - uses: viamrobotics/upload-module@v1
-        # if: github.event_name == 'release' # <-- once the action is working, uncomment this so you only upload on release
+        if: github.event_name == 'release'
         with:
           module-path: module.tar.gz
           org-id: your-org-id-uuid # <-- replace with your org ID. not required for public modules
