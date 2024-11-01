@@ -1,7 +1,3 @@
-"""
-A basic example of how to wrap a sensor into the Viam sensor component in Python
-"""
-
 from typing import Any, ClassVar, Dict, Mapping, Optional, Sequence
 
 from typing_extensions import Self
@@ -128,7 +124,7 @@ MODULENAME = "viam-obdii"
 class OBDII(Sensor):
     """
     Class representing the sensor to be implemented/wrapped.
-    Subclass the Viam Sensor component and implement the required functions
+    Subclass the Viam Movement Sensor component and implement the required functions
     """
 
     MODEL: ClassVar[Model] = Model(ModelFamily(MODULENAMESPACE, MODULETYPE), MODULENAME)

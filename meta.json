@@ -7,7 +7,7 @@
   "models": [
     {
       "api": "rdk:component:movement_sensor",
-      "model": "jeep:component:viam-obdii"
+      "model": "jeep:component:movement_sensor"
     }
   ],
   "entrypoint": "./run.sh"
