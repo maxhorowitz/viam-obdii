@@ -1,23 +1,16 @@
-from typing import Any, ClassVar, Dict, Mapping, Optional, Sequence
+from typing import Any, ClassVar, Dict, Mapping, Optional, Sequence, List, Tuple
 
 from typing_extensions import Self
-
-from viam.components.movement_sensor import MovementSensor
-from viam.components.movement_sensor import GeoPoint, Vector3, Orientation
+from viam.components.movement_sensor import MovementSensor, GeoPoint, Vector3, Orientation
 from viam.logging import getLogger
 from viam.proto.app.robot import ComponentConfig
 from viam.proto.common import ResourceName, Geometry
 from viam.resource.base import ResourceBase
 from viam.resource.registry import Registry, ResourceCreatorRegistration
 from viam.resource.types import Model, ModelFamily
-from viam.utils import SensorReading, ValueTypes
+from viam.utils import ValueTypes
 
-from typing import Any, Dict, Mapping, Optional, List, Tuple
-
-from pint import UnitRegistry
 import obd
-import traceback
-
 
 def quantity_to_array(quantity):
     """
