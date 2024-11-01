@@ -119,7 +119,7 @@ LOGGER = getLogger(__name__)
 # Model Family & Name
 MODULENAMESPACE = "jeep"
 MODULETYPE = "component"
-MODULENAME = "viam-obdii"
+MODULENAME = "movement_sensor"
 
 class OBDII(Sensor):
     """
