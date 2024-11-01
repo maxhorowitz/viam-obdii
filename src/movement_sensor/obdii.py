@@ -297,7 +297,7 @@ class OBDII(MovementSensor):
 
 # Register this model with the module.
 Registry.register_resource_creator(
-    Sensor.SUBTYPE,
+    MovementSensor.SUBTYPE,
     OBDII.MODEL,
     ResourceCreatorRegistration(OBDII.new, OBDII.validate_config),
 )
