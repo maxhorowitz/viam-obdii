@@ -5,10 +5,10 @@ A basic example of how to wrap a sensor into the Viam sensor component in Python
 import asyncio
 
 from viam.module.module import Module
-from viam.components.sensor import Sensor
+from viam.components.movement_sensor import MovementSensor
 from viam.resource.registry import Registry, ResourceCreatorRegistration
 
-from sensor.obdii import OBDII
+from movement_sensor.obdii import OBDII
 
 
 async def main():
@@ -18,7 +18,7 @@ async def main():
     """
 
     module = Module.from_args()
-    module.add_model_from_registry(Sensor.SUBTYPE, OBDII.MODEL)
+    module.add_model_from_registry(MovementSensor.SUBTYPE, OBDII.MODEL)
     await module.start()
 
 if __name__ == "__main__":
